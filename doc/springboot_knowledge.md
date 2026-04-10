@@ -25,7 +25,7 @@ springboot 4.0
 server.port=8090
 spring.datasource.url=jdbc:mysql://mysql6.sqlpub.com:3311/madgod?useUnicode=true&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
 spring.datasource.username=madgod
-spring.datasource.password=RhxUby8IrpwfaQTS
+spring.datasource.password=MrfM9w2SJuxKUvlC
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 ```
 
