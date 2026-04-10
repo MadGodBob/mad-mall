@@ -1,0 +1,336 @@
+目录-->文件夹
+
+ls			查看当下文件夹的内容
+ls -a			显示隐藏文件
+ls -l			以列表方式显示文件的详细信息
+ls -l 21:06 2023/8/11h			配合-l显示文件大小单位
+pwd			查看当前所在文件夹
+touch [文件名]		如果文件不存在，新建文件,必须有后缀
+mkdir [目录名]		创建目录，不能有后缀
+cd [目录名]		切换文件夹
+cp [文件名]		拷贝指定文件名
+mv [文件名]		移动指定文件名
+tree [目录名]		以树状方式显示目录结构
+clear			清屏
+
+cd test/temp		相对路径访问(在当前路径下)
+cd ../		当前目录的上一层级
+
+chmod u/g/o/a +/-/= r/w/x 文件	修改文件权限
+        r 读 w 写 x 执行
+        + 增加权限/- 撤销权限/ = 设定权限
+    u 文件所有者/g 用户组/o 其它以外的人/a 三者都是
+	比如chmod u=rwx,g=rx,o=r 文件
+数字权限r:4,w:3,x:1,-:0
+	u=rwx等同于u=7(数字相加)
+	chmod u=rwx,g=rwx,o=rwx等同于chmod 777
+#一般chmod 755 文件最为保险
+
+cp 原路径 目标路径 选项	拷贝文件
+mv 原路径 目标路径 选项	移动文件
+	目标路径可以重命名,比如mv a.py b.py
+	./	当前路径
+
+rm [文件夹名]		删除指定文件名
+rm [目录名] -r		删除指定文件
+	-i	以交互式进行（即进行询问）
+	-f	强制删除，忽略不存在的文件
+	-r	递归的删除目录下的内容,删除目录时必须加此操作
+	-d	删除空目录
+
+>	表示重定向指令，表示指令执行结果放到一个文件中，相当于日志
+	ls > a.txt
+>>	新增写入
+
+cat	查看文件(小型)
+
+ln -s 源文件 链接文件	软链接（不占空间）
+ln 源文件 链接文件	硬链接(两个文件占用相同空间)
+
+grep 选项 '内容' 文件名		找文件内容,匹配到的数据返回此行
+	-v	相当于求反，求补集
+	-n	显示匹配行及行号
+	-i 	忽略大小写
+
+通配符
+	*	代表0个或多个任意字符
+	?	任意一个字符
+	[列举的字符]	代表的任意一个字符
+
+find ./ -name test.sh	搜索符合条件的文件
+	find ./ -name '*.sh'	加上通配符
+
+tar -cf (文件名称) 需要打包的文件 		打包压缩文件,可以通配符打包多个
+	-c	生成档案文件，创建打包文件
+	-v	列出归档解档的详细过程，显示进度
+	-f	指定档案文件名称（一定写在最后）
+	-x	解开档案文件(解压)
+	-z	压缩
+	tar -xf 需要解压的文件 解压到的地址		（不写地址就默认当前）若压缩过则为-xzf
+
+sudo -s		切换管理员账号(密码yixuejiaoyu)
+sudo cat a.txt	sudo后加指令
+whoami		查看当前登录用户
+who		查看所有登录用户
+
+vim/vi 文件名	编辑器(效果一样),用于编辑文件文本命令
+	Linux终端(输入vim)->命令模式(输入!)->编辑模式(Esc)->命令模式
+	Linux终端(输入vim)->命令模式(输入:)->末行模式
+	末行模式(输入q!)->Linux终端		不保存退出,强制退出
+	末行模式(输入wq)->Linux终端		保存退出
+	末行模式(输入w)->Linux终端		保存
+	h j k l			移动光标(上下左右也可以)
+	u	撤销操作
+	/内容	查找内容
+		n m	查找内容后移动光标
+
+mysql -u root -p		之后输入密码Tisugou@1015进入数据库
+exit				退出数据库
+ifconfig			查看虚拟机地址
+systemctl start mysqld		运行数据库
+systemctl status mysqld		查看数据库状态
+
+============SQL语句=============
+--				前面加--注释
+show databases;			查看所有数据库,总数据库(information/mysql/performance/sys是环境库，不可动)
+create database a;		创建一个叫a的数据库
+drop database a;			删除a数据库
+use a;				选择a数据库
+select database();		查看当前使用的数据库
+show tables;			查看当前数据库中的所有表
+desc a;				查看a表结构，即类型及约束
+select * from a;		查看a表的内容
+创建表格
+	CREATE TABLE IF NOT EXISTS `test_tb`(
+	`id` INT UNSIGNED AUTO_INCREMENT COMMENT '编号',
+	`title` VARCHAR(100) NOT NULL COMMENT '标题',
+	`author` VARCHAR(40) NOT NULL COMMENT '作者',
+	`cdate` DATE COMMENT '日期',
+	-- foreign key(id) references goods(id),
+	PRIMARY KEY ( `id` )
+	)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='测试表格';
+	   #约束：
+		#主键 primary key：物理上存储的顺序（存在真实排序），主键都是非空、惟一的
+		#非空 not null：此字段不允许为空
+		#惟一 unique：此字段的值不允许重复
+		#默认 default：当不填写此字段时，会使用默认值
+		#外键 foreign key：对关系字段进行约束，当为关系字段填写值时，会到关联的表中查询此值是否存在，如果存在则填写成		  功，如果不存在则填写失败并抛出异常。
+ 		#如果你不想字段为NULL,可以设置字段的属性为 NOT NULL
+		#AUTO_INCREMENT定义列为自增的属性，一般用于主键，数值会自动加1
+		#COMMENT对字段的注释
+		#创建外键，test_tb中的id类型一样要和目标表（goods表）中的id一致（可以没有外键）
+		#删除外键：alter table test_tb drop foreign key 外键名称
+		#PRIMARY KEY关键字用于定义列为主键。 您可以使用多列来定义主键，列间以逗号分隔
+		#ENGINE 设置存储引擎，CHARSET 设置编码。
+
+show create table a				查看a表的建表语句
+# 实际不建议删改表格，建议直接删除表格重建新表
+alter table a add b 类型				a表中新增字段b(alter table a add b double default 0)
+alter table a change b c 类型及约束		a表中b改为c，并修改字段约束
+alter table a modify b double default 0		修改字段类型
+drop table a					删除表格a
+
+insert into a (title, author)
+values (value1, value2);			给表a内的title和author新增数据
+insert into a (title, author)
+values 	(value1, value2),
+		(value2, value2),
+		(value3, value2);			批量写入新增数据
+
+delete from a where 删除的条件;			批量删除a表数据
+	delete from a where id >= 50
+	delete from a where id = 50
+truncate table a				清空a表数据
+		
+update a set
+num=123,
+title='abc'
+where id > 50	;				修改/更新a表数据，有条件
+
+-------------select--------------
+select * from a where 条件;
+---------where后的条件----------
+	= / > / < / >= / <= / !=		比较id>10
+	and / or				逻辑运算符id > 10 and (num < 20 or id < 10)括弧先判断
+	name like '大_'				模糊查询字段name，_匹配一个字符
+	name like '大%'				模糊查询字段name，%匹配任意个字符
+	id in (1,2,3,4)				范围查询id=1,2,3,4中的任意一个
+	id between 1 and 5			查询id=1~5的连续数据(不同数据库between的头尾取舍不同)
+	name is null				搜索name是否为空的
+	name is not null				搜索name是否不为空的
+
+select * from a limit 10			查看a表前10条数据（相当于limit 1, 10）
+select * from a limit 2， 10			查看a表第二个开取前10条数据
+select title, id from a limit 10;		查看a表中字段title, id的10条数据
+select 
+    a.title
+    , a.id 
+from test a 
+limit 10;		查看test表title,id数据，并取别名a
+
+select distinct * from a;			对a表所有字段进行去重(所有字段全部相同的去重)	
+select distinct 
+    title
+    ,author
+from a;						选择字段进行去重,俩字段完全相同则去重
+
+select
+    id
+    ,title
+    ,num
+from test
+union			<----
+select
+    cost
+    ,quthor
+    ,null
+from test					多张表的上下关联，实现表的拼接，会对拼接结果进行去重。要求拼接的各字段类型一样(可用null来填空值)
+	union all				选择不去重
+
+select
+     id
+    ,title
+    ,cdate
+from test
+order by cdate (desc)				选择上面三字段对cdate进行从小到大排序(加上desc从大到小)(若结尾是cdate, id,则cdate排序时遇到相同数据按id进行排序。cdate desc, id表示cdate从大到小,id从小到大)
+
+select
+    count(0)			<--0可以写*
+from test
+where id > 10;				统计总数，不加where则统计总数
+select
+    count(cdate)
+from test;				聚合，统计cdate的总数，若为null则不计入
+
+select max/min/sum/avg(id) from test		聚合，最大值/最小值/求和/平均值(where也可以加)
+
+	select
+   	    gender
+	from test
+	group by gender				按gender分组(where要加一定写到group前面)
+select
+    gender
+    ,count(0)
+from test
+group by gender				按gender分组,分别统计各组的人数,后面可以继续加聚合
+	select
+  	  gender
+  	  ,max(cdate)
+	from test
+	group by gender				按gender分组,并分别显示出各组cdate的最大值
+select
+    age
+    ,gender
+    ,count(0)
+from test
+group by age, gender			在年龄、性别俩维度上分组分别多少人(类似于二列联表)
+	select
+    	   gender
+  	  ,group_concat(author)
+	from test
+	group by gender				gender分组后，每组中对于字段author用,连接起来并显示
+select
+    coalesce(gender, 'total')		<--最终显示的表中若gender这一列出现null，则用'total'替代
+    ,count(0)
+from test
+group by gender
+having count(0) > 10			having对结果进行筛选，而where是对初始数据筛选
+with rollup				分组结果后，在最后一行加上所有字段的总和
+
+select
+    a.id
+    ,b.id bid				<--实际显示表改名称
+    ,b.num
+from ()a				<--括号内为字表，应该为select语句
+(inner/left/right) join ()b
+    on a.num = b.num				join进行表的横向连接(默认为inner，即取交集),实现多张表的关联，因为同个人可能会在不同表出现信息，同时取别名。a表中num与b表中num相同时关联成立(left join时为左连接，a表全取，b表取关联，最后b表数据中没有a的字段时取null)(right join时为右连接，b表全取，a表取关联，最后a表数据中没有b的字段时取null),不推荐右连接
+select
+    ...
+from () a
+join () b
+    on ...
+    and b.num...			若要有b表的条件，写在join中
+where a.num...				若要有a表的条件，写在where中
+join () c
+    on ...				三张表关联
+
+id,name,pid		竖表，一般用于城市分级、公司结构。pid为父id，即所属的id
+select
+    a.id
+    ,a.name
+    ,b.id
+    ,b.name
+from city a
+join city b
+    on a.id = b.pid		将竖表进行自关联,显示二级层级关系(后面在加join自关联，可以显示三层层级关系)
+	# SQL语句书写顺序
+		select
+		from
+		join
+		where
+		group by
+		having
+		order by
+		limit
+
+===========内置函数==========
+# 都是 select 内置函数 的形式
+now()				获取日期时间
+year/month/day(now())		获取各个（now()可改为任意日期）
+length(num)			获取字段num的各个数据长度
+round(num, 3)			显示浮点数据num的前3位数，四舍五入
+reverse(num)			倒置num,将各个数据包括字符串和数字倒置
+substring(name, 3, 5)		截取name各个数据的从第3位开始，取5个(截取超出后不会补齐)
+ifnull(name, 0)			把name的空数据换为0
+case when age >= 70 then '70岁以上'
+    when age > 65 and gender = 'M' then '65岁以上'
+    when age > 60 then '60岁以上'
+    when age < 60 then '60岁以下'	
+    else '其它			
+    end	stauts			'相当于if-else,满足条件的显示then后面的数据。必须end结尾，后面status是别名
+cast(num as varchar(10))	转换数据类型
+row_number() over(order by num desc) rk		排序函数,赋予rk排名的序号
+	row_number()		即使num相同也不会重复，而是随机指定大的
+	rank()			num相同时rk会相同，但位置会占用，如1,1,3,3,5
+	dense_rank()		num相同时rk会相同,且位置不会占用，如1,1,2,2,3
+	# 此类型为开窗函数，前面一般为聚合函数或排序函数
+	# row_number() over(order by num desc, id) rk		先按num排序，num相同时再按id排序
+	# row_number() over(partition by dept_num, gender order by num desc) rk		partition by分组,作用是和order by一起，使得各个分组的排序是独立的
+	# avg(age) over(partition by gender)		over的使用
+
+with a as(
+    select
+    ......		
+)				放在开头，用于子列表,a代替子列表
+	with a as (),
+	     b as ()		创建多个临时表
+
+insert into table1(
+	...
+)
+select * from table2		写入数据，需要字段一一对应
+
+select * from table where name regexp '^jay'		regexp是指令，后面写正则表达式匹配
+
+create view V_test as
+select ...			创建对应数据的视图，视图会实时反映源数据的情况,会以table形式存在
+drop view v_test			删除视图，不会影响源数据
+
+begin				开启事务
+insert into table values(..)	此时还没有开始触发
+commit				执行事务
+rollback			回滚到事务前的数据,前提是不执行事务（可以进行多次事务的修改，成功则一起成功，否则一起回滚）
+
+create table table_name(
+	...
+)
+partition by range(week) (		<-range分区/hash分区
+	partition w1 values (1)
+	;partition w2 values (2)
+	;partition w3 values (3)
+)				分区
+
+=================jupyter==================实现向数据库传入、下载文件
+python密码为123456
+nohup jupyter notebook --allow-root > jupyter.log 2>&1 &	开启jupyter notebook服务
+ps aux | grep py			查看服务是否正常运行
