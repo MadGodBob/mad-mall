@@ -112,7 +112,7 @@ public List<User> list(){
 新建common包，添加CodeGenerator.java
 
 ```
-package com.madgod.library.common;
+package com.madgod.mall.common;
 
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
@@ -133,8 +133,8 @@ public class CodeGenerator {
         参数配置 表名 作者 工作目录 父类包名称 数据库url 数据库账号 数据库密码
     */
     public static String tableName = "user";
-    public static String author = "madgod";
-    public static String workspaceParent = "com.madgod.library";
+    public static String author = "madmall";
+    public static String workspaceParent = "com.madgod.mall";
     public static String MySQL_url;
     public static String usename;
     public static String password;
@@ -213,11 +213,13 @@ public class CodeGenerator {
                 .strategyConfig(builder ->
                         builder.addInclude(tableName)
                                 .enableSkipView()
-                                .entityBuilder().enableLombok(new ClassAnnotationAttributes("@Data","lombok.Data"))
+                                .entityBuilder()
+                                .enableFileOverride()
+                                .enableLombok(new ClassAnnotationAttributes("@Data","lombok.Data"))
                                 .mapperBuilder().mapperAnnotation(Mapper.class)
                                 .controllerBuilder()
                                 .mapperBuilder()
-                                .mapperXmlTemplate("/templates/simple-mapper.xml")
+//                                .mapperXmlTemplate("/templates/simple-mapper.xml")
                 )
                 .templateEngine(new FreemarkerTemplateEngine())
                 .execute();
